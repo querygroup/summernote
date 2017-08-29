@@ -419,6 +419,14 @@ define([
           click: context.createInvokeHandler('imageDialog.show')
         }).render();
       });
+        
+    context.memo('button.pictureWithoutInsertUrl', function () {
+        return ui.button({
+          contents: ui.icon(options.icons.picture),
+          tooltip: lang.image.image,
+          click: context.createInvokeHandler('imageDialogWithoutUrl.show')
+        }).render();
+      });
 
       context.memo('button.video', function () {
         return ui.button({

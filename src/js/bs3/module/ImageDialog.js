@@ -1,13 +1,25 @@
 define([
   'summernote/base/core/key'
 ], function (key) {
-  var ImageDialog = function (context) {
+  var ImageDialog = function (context, dialogBody) {
     var self = this;
     var ui = $.summernote.ui;
 
     var $editor = context.layoutInfo.editor;
     var options = context.options;
     var lang = options.langInfo;
+      
+    var getDialogBody = function(lang, imageLimitation) {
+        return !!dialogBody ? dialogBody : '<div class="form-group note-group-select-from-files">' +
+                   '<label>' + lang.image.selectFromFiles + '</label>' +
+                   '<input class="note-image-input form-control" type="file" name="files" accept="image/*" multiple="multiple" />' +
+                   imageLimitation +
+                 '</div>' +
+                 '<div class="form-group note-group-image-url" style="overflow:auto;">' +
+                   '<label>' + lang.image.url + '</label>' +
+                   '<input class="note-image-url form-control col-md-12" type="text" />' +
+                 '</div>';
+      };
 
     this.initialize = function () {
       var $container = options.dialogsInBody ? $(document.body) : $editor;
@@ -20,15 +32,7 @@ define([
         imageLimitation = '<small>' + lang.image.maximumFileSize + ' : ' + readableSize + '</small>';
       }
 
-      var body = '<div class="form-group note-group-select-from-files">' +
-                   '<label>' + lang.image.selectFromFiles + '</label>' +
-                   '<input class="note-image-input form-control" type="file" name="files" accept="image/*" multiple="multiple" />' +
-                   imageLimitation +
-                 '</div>' +
-                 '<div class="form-group note-group-image-url" style="overflow:auto;">' +
-                   '<label>' + lang.image.url + '</label>' +
-                   '<input class="note-image-url form-control col-md-12" type="text" />' +
-                 '</div>';
+      var body = getDialogBody(lang, imageLimitation);
       var footer = '<button href="#" class="btn btn-primary note-image-btn disabled" disabled>' + lang.image.insert + '</button>';
 
       this.$dialog = ui.dialog({
@@ -119,6 +123,6 @@ define([
       });
     };
   };
-
+    
   return ImageDialog;
 });
