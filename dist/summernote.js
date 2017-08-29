@@ -1,12 +1,12 @@
 /**
- * Super simple wysiwyg editor v0.8.7
+ * Super simple wysiwyg editor v0.8.8qr
  * http://summernote.org/
  *
  * summernote.js
  * Copyright 2013- Alan Hong. and other contributors
  * summernote may be freely distributed under the MIT license./
  *
- * Date: 2017-08-15T06:23Z
+ * Date: 2017-08-29T07:06Z
  */
 (function (factory) {
   /* global define */
@@ -6235,6 +6235,14 @@
           click: context.createInvokeHandler('imageDialog.show')
         }).render();
       });
+        
+    context.memo('button.pictureWithoutInsertUrl', function () {
+        return ui.button({
+          contents: ui.icon(options.icons.picture),
+          tooltip: lang.image.image,
+          click: context.createInvokeHandler('imageDialogWithoutUrl.show')
+        }).render();
+      });
 
       context.memo('button.video', function () {
         return ui.button({
@@ -6860,13 +6868,25 @@
     };
   };
 
-  var ImageDialog = function (context) {
+  var ImageDialog = function (context, dialogBody) {
     var self = this;
     var ui = $.summernote.ui;
 
     var $editor = context.layoutInfo.editor;
     var options = context.options;
     var lang = options.langInfo;
+      
+    var getDialogBody = function(lang, imageLimitation) {
+        return !!dialogBody ? dialogBody : '<div class="form-group note-group-select-from-files">' +
+                   '<label>' + lang.image.selectFromFiles + '</label>' +
+                   '<input class="note-image-input form-control" type="file" name="files" accept="image/*" multiple="multiple" />' +
+                   imageLimitation +
+                 '</div>' +
+                 '<div class="form-group note-group-image-url" style="overflow:auto;">' +
+                   '<label>' + lang.image.url + '</label>' +
+                   '<input class="note-image-url form-control col-md-12" type="text" />' +
+                 '</div>';
+      };
 
     this.initialize = function () {
       var $container = options.dialogsInBody ? $(document.body) : $editor;
@@ -6879,15 +6899,7 @@
         imageLimitation = '<small>' + lang.image.maximumFileSize + ' : ' + readableSize + '</small>';
       }
 
-      var body = '<div class="form-group note-group-select-from-files">' +
-                   '<label>' + lang.image.selectFromFiles + '</label>' +
-                   '<input class="note-image-input form-control" type="file" name="files" accept="image/*" multiple="multiple" />' +
-                   imageLimitation +
-                 '</div>' +
-                 '<div class="form-group note-group-image-url" style="overflow:auto;">' +
-                   '<label>' + lang.image.url + '</label>' +
-                   '<input class="note-image-url form-control col-md-12" type="text" />' +
-                 '</div>';
+      var body = getDialogBody(lang, imageLimitation);
       var footer = '<button href="#" class="btn btn-primary note-image-btn disabled" disabled>' + lang.image.insert + '</button>';
 
       this.$dialog = ui.dialog({
@@ -6977,6 +6989,14 @@
         ui.showDialog(self.$dialog);
       });
     };
+  };
+
+  var ImageDialogWithoutUrl = function (context) {
+      var dialogBody = '<div class="form-group note-group-select-from-files">' +
+                       '<label>' +  '</label>' +
+                       '<input class="note-image-input form-control" type="file" name="files" accept="image/*" multiple="multiple" />' +
+                     '</div>';
+      ImageDialog.call(this, context, dialogBody);
   };
 
 
@@ -7319,7 +7339,7 @@
 
       var body = [
         '<p class="text-center">',
-        '<a href="http://summernote.org/" target="_blank">Summernote 0.8.7</a> · ',
+        '<a href="http://summernote.org/" target="_blank">Summernote 0.8.8qr</a> · ',
         '<a href="https://github.com/summernote/summernote" target="_blank">Project</a> · ',
         '<a href="https://github.com/summernote/summernote/issues" target="_blank">Issues</a>',
         '</p>'
@@ -7666,7 +7686,7 @@
 
 
   $.summernote = $.extend($.summernote, {
-    version: '0.8.7',
+    version: '0.8.8qr',
     ui: ui,
     dom: dom,
 
@@ -7692,6 +7712,7 @@
         'linkDialog': LinkDialog,
         'linkPopover': LinkPopover,
         'imageDialog': ImageDialog,
+        'imageDialogWithoutUrl': ImageDialogWithoutUrl,
         'imagePopover': ImagePopover,
         'tablePopover': TablePopover,
         'videoDialog': VideoDialog,
@@ -7711,7 +7732,7 @@
         ['color', ['color']],
         ['para', ['ul', 'ol', 'paragraph']],
         ['table', ['table']],
-        ['insert', ['link', 'picture', 'video']],
+        ['insert', ['link', 'picture', 'pictureWithoutInsertUrl', 'video']],
         ['view', ['fullscreen', 'codeview', 'help']]
       ],
 
@@ -7894,7 +7915,7 @@
         'link': 'note-icon-link',
         'unlink': 'note-icon-chain-broken',
         'magic': 'note-icon-magic',
-        'menuCheck': 'note-icon-check',
+        'menuCheck': 'note-icon-menu-check',
         'minus': 'note-icon-minus',
         'orderedlist': 'note-icon-orderedlist',
         'pencil': 'note-icon-pencil',

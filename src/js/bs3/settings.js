@@ -26,8 +26,10 @@ define([
   'summernote/bs3/module/HintPopover'
 ], function (
   ui, dom, lang,
-  Editor, Clipboard, Dropzone, Codeview, Statusbar, Fullscreen, Handle, AutoLink, AutoSync, Placeholder,
-  Buttons, Toolbar, LinkDialog, LinkPopover, ImageDialog, ImageDialogWithoutUrl, ImagePopover, TablePopover, VideoDialog, HelpDialog, AirPopover, HintPopover
+  Editor, Clipboard, Dropzone, Codeview, Statusbar, Fullscreen, Handle, AutoLink,
+  AutoSync, Placeholder,  Buttons, Toolbar, LinkDialog, LinkPopover, ImageDialog,
+  ImageDialogWithoutUrl, ImagePopover, TablePopover, VideoDialog, HelpDialog,
+   AirPopover, HintPopover
 ) {
 
   $.summernote = $.extend($.summernote, {
